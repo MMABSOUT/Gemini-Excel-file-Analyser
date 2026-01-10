@@ -1,0 +1,7 @@
+{
+  "name": "InsightFlow - Excel AI Automator",
+  "description": "An intelligent dashboard that connects to your data, analyzes complex relationships using Gemini AI, and generates dynamic visualizations with automated insights.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
