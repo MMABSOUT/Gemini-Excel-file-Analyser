@@ -1,44 +1,109 @@
+export type CellValue = string | number | boolean | Date | null;
 
 export interface DataRow {
-  [key: string]: any;
+  [key: string]: CellValue;
 }
 
-export interface ChartSuggestion {
-  type: 'bar' | 'line' | 'scatter' | 'area' | 'pie';
-  title: string;
-  xAxis: string;
-  yAxis: string;
-  description: string;
+export type ColumnType = 'numeric' | 'categorical' | 'text' | 'date' | 'boolean' | 'empty';
+
+export interface HistogramBin {
+  label: string;
+  start: number;
+  end: number;
+  count: number;
 }
 
-export interface DataRelationship {
+export interface ValueCount {
+  value: string;
+  count: number;
+  percent: number;
+}
+
+export interface NumericStats {
+  min: number;
+  max: number;
+  mean: number;
+  median: number;
+  std: number;
+  q1: number;
+  q3: number;
+  sum: number;
+  skewness: number;
+  outliers: number;
+  zeros: number;
+  negatives: number;
+  histogram: HistogramBin[];
+}
+
+export interface TimelinePoint {
+  label: string;
+  count: number;
+}
+
+export interface DateStats {
+  min: Date;
+  max: Date;
+  spanDays: number;
+  timeline: TimelinePoint[];
+}
+
+export interface ColumnStats {
+  name: string;
+  type: ColumnType;
+  count: number;
+  missing: number;
+  missingPercent: number;
+  unique: number;
+  uniquePercent: number;
+  topValues: ValueCount[];
+  avgLength?: number;
+  numeric?: NumericStats;
+  date?: DateStats;
+}
+
+export interface CorrelationPair {
+  a: string;
+  b: string;
+  r: number;
+  n: number;
+}
+
+export interface CorrelationResult {
+  columns: string[];
+  matrix: (number | null)[][];
+  topPairs: CorrelationPair[];
+}
+
+export interface DatasetStats {
+  rowCount: number;
+  colCount: number;
+  totalCells: number;
+  missingCells: number;
+  completeness: number;
+  duplicateRows: number;
+  typeCounts: Record<ColumnType, number>;
+  columns: ColumnStats[];
+  correlations: CorrelationResult;
+}
+
+export interface AiRelationship {
   source: string;
   target: string;
   type: string;
-  strength: number;
   insight: string;
 }
 
-export interface AnalysisResult {
+export interface AiInsightsResult {
   summary: string;
   keyTakeaways: string[];
-  charts: ChartSuggestion[];
-  relationships: DataRelationship[];
-  statistics: {
-    rowCount: number;
-    colCount: number;
-    columnDetails: {
-      name: string;
-      type: 'numeric' | 'categorical' | 'date';
-      missingValues: number;
-    }[];
-  };
+  relationships: AiRelationship[];
+  recommendations: string[];
 }
 
-export enum AppState {
-  IDLE = 'IDLE',
-  LOADING_FILE = 'LOADING_FILE',
-  ANALYZING = 'ANALYZING',
-  READY = 'READY',
-  ERROR = 'ERROR'
+export interface LoadedFile {
+  name: string;
+  size: number;
+  sheetNames: string[];
 }
+
+export type TabId = 'overview' | 'columns' | 'correlations' | 'data' | 'ai';
